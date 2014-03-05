@@ -1,4 +1,5 @@
 require 'sequel_spec/validation/validate_matcher'
+require 'sequel_spec/validation/validate_length_matcher'
 require 'sequel_spec/validation/validate_exact_length_matcher'
 require 'sequel_spec/validation/validate_format_matcher'
 require 'sequel_spec/validation/validate_includes_matcher'
