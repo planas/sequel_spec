@@ -29,28 +29,13 @@ module SequelSpec
           self
         end
 
-        def not_allowing_nil
-          @options[:allow_nil] = false
-          self
-        end
-
         def allowing_blank
           @options[:allow_blank] = true
           self
         end
 
-        def not_allowing_blank
-          @options[:allow_blank] = false
-          self
-        end
-
         def allowing_missing
           @options[:allowing_missing] = true
-          self
-        end
-
-        def not_allowing_missing
-          @options[:allowing_missing] = false
           self
         end
 
