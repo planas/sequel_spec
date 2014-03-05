@@ -28,6 +28,8 @@ module SequelSpec
       def validate_unique(*args)
         ValidateUniqueMatcher.new(*args)
       end
+
+      alias :validate_uniqueness_of :validate_unique
     end
   end
 end

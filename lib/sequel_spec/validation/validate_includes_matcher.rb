@@ -20,6 +20,8 @@ module SequelSpec
       def validate_includes(*args)
         ValidateIncludesMatcher.new(*args)
       end
+
+      alias :ensure_inclusion_of :validate_includes
     end
   end
 end

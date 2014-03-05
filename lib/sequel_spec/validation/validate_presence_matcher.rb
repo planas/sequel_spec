@@ -16,6 +16,8 @@ module SequelSpec
       def validate_presence(*args)
         ValidatePresenceMatcher.new(*args)
       end
+
+      alias :validate_presence_of :validate_presence
     end
   end
 end

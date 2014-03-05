@@ -20,6 +20,8 @@ module SequelSpec
       def validate_format(*args)
         ValidateFormatMatcher.new(*args)
       end
+
+      alias :validate_format_of :validate_format
     end
   end
 end

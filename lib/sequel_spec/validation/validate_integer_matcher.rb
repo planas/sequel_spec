@@ -16,6 +16,8 @@ module SequelSpec
       def validate_integer(*args)
         ValidateIntegerMatcher.new(*args)
       end
+
+      alias :validate_integrity_of :validate_integer
     end
   end
 end

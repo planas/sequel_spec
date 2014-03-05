@@ -16,6 +16,8 @@ module SequelSpec
       def validate_numeric(*args)
         ValidateNumericMatcher.new(*args)
       end
+
+      alias :validate_numericality_of :validate_numeric
     end
   end
 end
