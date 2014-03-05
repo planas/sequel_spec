@@ -13,7 +13,7 @@ module SequelSpec
         end
 
         def valid_options
-          [:message]
+          [:with_message]
         end
 
         def args_to_called_attributes(args)

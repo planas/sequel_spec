@@ -25,6 +25,12 @@ describe "validate_unique_matcher" do
         @matcher = validate_unique :name, :id
       }.to raise_error(ArgumentError)
     end
+
+    it "should refuse not allowed options" do
+      expect {
+        @matcher = validate_unique(:name).allowing_nil
+      }.to raise_error(ArgumentError)
+    end
   end
 
   describe "messages" do
@@ -71,6 +77,5 @@ describe "validate_unique_matcher" do
     it{ should validate_unique(:name).with_message("Hello") }
     it{ should_not validate_unique(:id) }
     it{ should_not validate_unique(:price) }
-    it{ should_not validate_unique(:name).allowing_nil }
   end
 end

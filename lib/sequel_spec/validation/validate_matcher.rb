@@ -24,22 +24,36 @@ module SequelSpec
           self
         end
 
+        def valid_options
+          [:allowing_blank, :allowing_missing, :allowing_nil, :with_message]
+        end
+
+        def check_valid_option(opt)
+          unless valid_options.include?(opt)
+            raise ArgumentError, "This matcher doesn't allow the option #{opt}"
+          end
+        end
+
         def allowing_nil
+          check_valid_option :allowing_nil
           @options[:allow_nil] = true
           self
         end
 
         def allowing_blank
+          check_valid_option :allowing_blank
           @options[:allow_blank] = true
           self
         end
 
         def allowing_missing
+          check_valid_option :allowing_missing
           @options[:allowing_missing] = true
           self
         end
 
         def with_message(message)
+          check_valid_option :with_message
           @options[:message] = message
           self
         end
@@ -50,10 +64,6 @@ module SequelSpec
 
         def additionnal_param_required?
           additionnal_param_type != NilClass
-        end
-
-        def valid_options
-          [:allow_blank, :allow_missing, :allow_nil, :message]
         end
 
         def valid?(db, instance, klass, attribute, options)
