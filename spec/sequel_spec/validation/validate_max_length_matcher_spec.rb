@@ -129,37 +129,27 @@ describe "validate_max_length_matcher" do
         end
       end
 
-      <<-PENDING
       describe "with options" do
         it "should contain a description" do
-          @matcher = validate_max_length 4, :name, :allow_nil => true
+          @matcher = validate_length_of(:name).is_at_most(4).allowing_nil
           @matcher.description.should == "validate length of :name is less than or equal to 4 with option(s) :allow_nil => true"
         end
 
         it "should set failure messages" do
-          @matcher = validate_max_length 4, :price, :allow_nil => true
+          @matcher = validate_length_of(:price).is_at_most(4).allowing_nil
           @matcher.matches? subject
           @matcher.failure_message.should == "expected Item to " + @matcher.description
           @matcher.negative_failure_message.should == "expected Item to not " + @matcher.description
         end
 
         it "should explicit used options if different than expected" do
-          @matcher = validate_max_length 4, :name, :allow_blank => true
+          @matcher = validate_length_of(:name).is_at_most(4).allowing_blank
           @matcher.matches? subject
           explanation = " but called with option(s) :allow_nil => true instead"
           @matcher.failure_message.should == "expected Item to " + @matcher.description + explanation
           @matcher.negative_failure_message.should == "expected Item to not " + @matcher.description + explanation
         end
-
-        it "should warn if invalid options are used" do
-          @matcher = validate_max_length 4, :name, :allow_anything => true
-          @matcher.matches? subject
-          explanation = " but option :allow_anything is not valid"
-          @matcher.failure_message.should == "expected Item to " + @matcher.description + explanation
-          @matcher.negative_failure_message.should == "expected Item to not " + @matcher.description + explanation
-        end
       end
-      PENDING
     end
   end
 
@@ -174,10 +164,10 @@ describe "validate_max_length_matcher" do
 
     context "with the new syntax" do
       it{ should validate_length_of(:name).is_at_most(4) }
-      #it{ should validate_max_length(4, :name, :allow_nil => true) }
+      it{ should validate_length_of(:name).is_at_most(4).allowing_nil }
       it{ should_not validate_length_of(:price).is_at_most(4) }
       it{ should_not validate_length_of(:name).is_at_most(3) }
-      #it{ should_not validate_max_length(4, :name, :allow_blank => true) }
+      it{ should_not validate_length_of(:name).is_at_most(4).allowing_blank }
     end
   end
 end

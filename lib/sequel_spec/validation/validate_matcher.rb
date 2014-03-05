@@ -24,6 +24,41 @@ module SequelSpec
           end
         end
 
+        def allowing_nil
+          @options[:allow_nil] = true
+          self
+        end
+
+        def not_allowing_nil
+          @options[:allow_nil] = false
+          self
+        end
+
+        def allowing_blank
+          @options[:allow_blank] = true
+          self
+        end
+
+        def not_allowing_blank
+          @options[:allow_blank] = false
+          self
+        end
+
+        def allowing_missing
+          @options[:allowing_missing] = true
+          self
+        end
+
+        def not_allowing_missing
+          @options[:allowing_missing] = false
+          self
+        end
+
+        def with_message(message)
+          @options[:message] = message
+          self
+        end
+
         def additionnal_param_type
           NilClass
         end
