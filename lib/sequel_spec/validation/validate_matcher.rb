@@ -22,6 +22,8 @@ module SequelSpec
           else
             raise ArgumentError, "Too many params for matcher" unless args.empty?
           end
+
+          self
         end
 
         def allowing_nil
