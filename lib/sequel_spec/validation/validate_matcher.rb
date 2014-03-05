@@ -3,9 +3,7 @@ module SequelSpec
     module Validation
       class ValidateMatcher < Base
         def initialize(*args)
-          # initialize Base
-          options = args.last.is_a?(Hash) ? args.pop : {}
-          super(args.pop, options)
+          super(args.pop)
 
           # check additionnal param
           if additionnal_param_required?
@@ -74,14 +72,6 @@ module SequelSpec
         end
 
         def valid?(db, instance, klass, attribute, options)
-          # check options
-          invalid_options = options.keys.reject { |opt| valid_options.include?(opt) }
-          invalid_options.each do |opt|
-            @suffix << "but option #{opt.inspect} is not valid"
-          end
-
-          return false unless invalid_options.empty?
-
           # check validation itself
           called_count = 0
           instance = instance.dup

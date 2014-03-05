@@ -19,6 +19,7 @@ describe "validate_unique_matcher" do
         @matcher = validate_unique
       }.to raise_error(ArgumentError)
     end
+
     it "should refuse additionnal parameters" do
       expect {
         @matcher = validate_unique :name, :id
@@ -32,6 +33,7 @@ describe "validate_unique_matcher" do
         @matcher = validate_unique :name
         @matcher.description.should == "validate uniqueness of :name"
       end
+
       it "should set failure messages" do
         @matcher = validate_unique :name
         @matcher.matches? subject
@@ -39,28 +41,24 @@ describe "validate_unique_matcher" do
         @matcher.negative_failure_message.should == "expected Item to not " + @matcher.description
       end
     end
+
     describe "with options" do
       it "should contain a description" do
-        @matcher = validate_unique :name, :message => "Hello"
+        @matcher = validate_unique(:name).with_message("Hello")
         @matcher.description.should == 'validate uniqueness of :name with option(s) :message => "Hello"'
       end
+
       it "should set failure messages" do
-        @matcher = validate_unique :price, :message => "Hello"
+        @matcher = validate_unique(:price).with_message("Hello")
         @matcher.matches? subject
         @matcher.failure_message.should == "expected Item to " + @matcher.description
         @matcher.negative_failure_message.should == "expected Item to not " + @matcher.description
       end
+
       it "should explicit used options if different than expected" do
-        @matcher = validate_unique :name, :message => "Hello world"
+        @matcher = validate_unique(:name).with_message("Hello world")
         @matcher.matches? subject
         explanation = ' but called with option(s) :message => "Hello" instead'
-        @matcher.failure_message.should == "expected Item to " + @matcher.description + explanation
-        @matcher.negative_failure_message.should == "expected Item to not " + @matcher.description + explanation
-      end
-      it "should warn if invalid options are used" do
-        @matcher = validate_unique :name, :allow_nil => true
-        @matcher.matches? subject
-        explanation = " but option :allow_nil is not valid"
         @matcher.failure_message.should == "expected Item to " + @matcher.description + explanation
         @matcher.negative_failure_message.should == "expected Item to not " + @matcher.description + explanation
       end
@@ -70,9 +68,9 @@ describe "validate_unique_matcher" do
   describe "matchers" do
     it{ should validate_unique(:name) }
     it{ should validate_unique([:id, :name]) }
-    it{ should validate_unique(:name, :message => "Hello") }
+    it{ should validate_unique(:name).with_message("Hello") }
     it{ should_not validate_unique(:id) }
     it{ should_not validate_unique(:price) }
-    it{ should_not validate_unique(:name, :allow_nil => true) }
+    it{ should_not validate_unique(:name).allowing_nil }
   end
 end
