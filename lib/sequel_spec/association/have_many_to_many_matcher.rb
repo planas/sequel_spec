@@ -2,9 +2,8 @@ module SequelSpec
   module Matchers
     module Association
       class HaveManyToManyMatcher < AssociationMatcher
-        def initialize(attribute)
-          @association_type = :many_to_many
-          super
+        def association_type
+          :many_to_many
         end
       end
 

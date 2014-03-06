@@ -2,9 +2,8 @@ module SequelSpec
   module Matchers
     module Association
       class HaveManyToOneMatcher < AssociationMatcher
-        def initialize(attribute)
-          @association_type = :many_to_one
-          super
+        def association_type
+          :many_to_one
         end
       end
 

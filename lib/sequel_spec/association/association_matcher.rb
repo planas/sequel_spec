@@ -2,8 +2,6 @@ module SequelSpec
   module Matchers
     module Association
       class AssociationMatcher < Base
-        attr_reader :association_type
-
         def description
           desc = "have a #{association_type} association #{@attribute.inspect}"
           desc << " with option(s) #{hash_to_nice_string @options}" unless @options.empty?
