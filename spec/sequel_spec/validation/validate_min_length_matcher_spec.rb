@@ -14,152 +14,75 @@ describe "validate_min_length_matcher" do
   subject{ Item }
 
   describe "arguments" do
-    context "with the old syntax" do
-      it "should require attribute" do
-        expect {
-          @matcher = validate_min_length
-        }.to raise_error(ArgumentError)
-      end
-
-      it "should require additionnal parameters" do
-        expect {
-          @matcher = validate_min_length :name
-        }.to raise_error(ArgumentError)
-      end
-
-      it "should refuse invalid additionnal parameters" do
-        expect {
-          @matcher = validate_min_length :id, :name
-        }.to raise_error(ArgumentError)
-      end
-
-      it "should accept valid additionnal parameters" do
-        expect {
-          @matcher = validate_min_length 4, :name
-        }.not_to raise_error
-      end
+    # @TODO: This two first examples are duplicated across implementations
+    it "should require attribute" do
+      expect {
+        @matcher = validate_length_of
+      }.to raise_error(ArgumentError)
     end
 
-    context "with the new syntax" do
-      # @TODO: This two first examples are duplicated across implementations
-      it "should require attribute" do
-        expect {
-          @matcher = validate_length_of
-        }.to raise_error(ArgumentError)
-      end
+    it "should refuse invalid additionnal parameters" do
+      expect {
+        @matcher = validate_length_of(:id, :name)
+      }.to raise_error(ArgumentError)
+    end
 
-      it "should refuse invalid additionnal parameters" do
-        expect {
-          @matcher = validate_length_of(:id, :name)
-        }.to raise_error(ArgumentError)
-      end
+    it "should require additionnal parameters" do
+      expect {
+        @matcher = validate_length_of(:name).matches? # it doesn't whine until #matches? is called
+      }.to raise_error(ArgumentError)
+    end
 
-      it "should require additionnal parameters" do
-        expect {
-          @matcher = validate_length_of(:name).matches? # it doesn't whine until #matches? is called
-        }.to raise_error(ArgumentError)
-      end
-
-      it "should accept valid additionnal parameters" do
-        expect {
-          @matcher = validate_length_of(:name).is_at_least(4)
-        }.not_to raise_error
-      end
+    it "should accept valid additionnal parameters" do
+      expect {
+        @matcher = validate_length_of(:name).is_at_least(4)
+      }.not_to raise_error
     end
   end
 
   describe "messages" do
-    context "with the old syntax" do
-      describe "without option" do
-        it "should contain a description" do
-          @matcher = validate_min_length 4, :name
-          @matcher.description.should == "validate length of :name is greater than or equal to 4"
-        end
-
-        it "should set failure messages" do
-          @matcher = validate_min_length 4, :name
-          @matcher.matches? subject
-          @matcher.failure_message.should == "expected Item to " + @matcher.description
-          @matcher.negative_failure_message.should == "expected Item to not " + @matcher.description
-        end
+    describe "without option" do
+      it "should contain a description" do
+        @matcher = validate_length_of(:name).is_at_least(4)
+        @matcher.description.should == "validate length of :name is greater than or equal to 4"
       end
-      describe "with options" do
-        it "should contain a description" do
-          @matcher = validate_min_length(4, :name).allowing_nil
-          @matcher.description.should == "validate length of :name is greater than or equal to 4 with option(s) :allow_nil => true"
-        end
 
-        it "should set failure messages" do
-          @matcher = validate_min_length(4, :price).allowing_nil
-          @matcher.matches? subject
-          @matcher.failure_message.should == "expected Item to " + @matcher.description
-          @matcher.negative_failure_message.should == "expected Item to not " + @matcher.description
-        end
-
-        it "should explicit used options if different than expected" do
-          @matcher = validate_min_length(4, :name).allowing_blank
-          @matcher.matches? subject
-          explanation = " but called with option(s) :allow_nil => true instead"
-          @matcher.failure_message.should == "expected Item to " + @matcher.description + explanation
-          @matcher.negative_failure_message.should == "expected Item to not " + @matcher.description + explanation
-        end
+      it "should set failure messages" do
+        @matcher = validate_length_of(:name).is_at_least(4)
+        @matcher.matches? subject
+        @matcher.failure_message.should == "expected Item to " + @matcher.description
+        @matcher.negative_failure_message.should == "expected Item to not " + @matcher.description
       end
     end
 
-    context "with the new syntax" do
-      describe "without option" do
-        it "should contain a description" do
-          @matcher = validate_length_of(:name).is_at_least(4)
-          @matcher.description.should == "validate length of :name is greater than or equal to 4"
-        end
-
-        it "should set failure messages" do
-          @matcher = validate_length_of(:name).is_at_least(4)
-          @matcher.matches? subject
-          @matcher.failure_message.should == "expected Item to " + @matcher.description
-          @matcher.negative_failure_message.should == "expected Item to not " + @matcher.description
-        end
+    describe "with options" do
+      it "should contain a description" do
+        @matcher = validate_length_of(:name).is_at_least(4).allowing_nil
+        @matcher.description.should == "validate length of :name is greater than or equal to 4 with option(s) :allow_nil => true"
       end
 
-      describe "with options" do
-        it "should contain a description" do
-          @matcher = validate_length_of(:name).is_at_least(4).allowing_nil
-          @matcher.description.should == "validate length of :name is greater than or equal to 4 with option(s) :allow_nil => true"
-        end
+      it "should set failure messages" do
+        @matcher = validate_length_of(:price).is_at_least(4).allowing_nil
+        @matcher.matches? subject
+        @matcher.failure_message.should == "expected Item to " + @matcher.description
+        @matcher.negative_failure_message.should == "expected Item to not " + @matcher.description
+      end
 
-        it "should set failure messages" do
-          @matcher = validate_length_of(:price).is_at_least(4).allowing_nil
-          @matcher.matches? subject
-          @matcher.failure_message.should == "expected Item to " + @matcher.description
-          @matcher.negative_failure_message.should == "expected Item to not " + @matcher.description
-        end
-
-        it "should explicit used options if different than expected" do
-          @matcher = validate_length_of(:name).is_at_least(4).allowing_blank
-          @matcher.matches? subject
-          explanation = " but called with option(s) :allow_nil => true instead"
-          @matcher.failure_message.should == "expected Item to " + @matcher.description + explanation
-          @matcher.negative_failure_message.should == "expected Item to not " + @matcher.description + explanation
-        end
+      it "should explicit used options if different than expected" do
+        @matcher = validate_length_of(:name).is_at_least(4).allowing_blank
+        @matcher.matches? subject
+        explanation = " but called with option(s) :allow_nil => true instead"
+        @matcher.failure_message.should == "expected Item to " + @matcher.description + explanation
+        @matcher.negative_failure_message.should == "expected Item to not " + @matcher.description + explanation
       end
     end
   end
 
   describe "matchers" do
-    context "with the old syntax" do
-      it{ should validate_min_length(4, :name) }
-      it{ should validate_min_length(4, :name).allowing_nil }
-      it{ should_not validate_min_length(4, :price) }
-      it{ should_not validate_min_length(3, :name) }
-      it{ should_not validate_min_length(4, :name).allowing_blank }
-    end
-
-    context "with the new syntax" do
-      it{ should validate_length_of(:name).is_at_least(4) }
-      it{ should validate_length_of(:name).is_at_least(4).allowing_nil }
-      it{ should_not validate_length_of(:price).is_at_least(4) }
-      it{ should_not validate_length_of(:name).is_at_least(3) }
-      it{ should_not validate_length_of(:name).is_at_least(4).allowing_blank }
-    end
+    it{ should validate_length_of(:name).is_at_least(4) }
+    it{ should validate_length_of(:name).is_at_least(4).allowing_nil }
+    it{ should_not validate_length_of(:price).is_at_least(4) }
+    it{ should_not validate_length_of(:name).is_at_least(3) }
+    it{ should_not validate_length_of(:name).is_at_least(4).allowing_blank }
   end
 end
