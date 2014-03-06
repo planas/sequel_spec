@@ -4,53 +4,6 @@ module SequelSpec
   module Matchers
     module Validation
       class ValidateMatcher < Base
-        def initialize(attribute)
-          super(attribute)
-          self
-        end
-
-        def valid_options
-          [:allowing_blank, :allowing_missing, :allowing_nil, :with_message]
-        end
-
-        def check_valid_option(opt)
-          unless valid_options.include?(opt)
-            raise ArgumentError, "This matcher doesn't allow the option #{opt}"
-          end
-        end
-
-        def allowing_nil
-          check_valid_option :allowing_nil
-          @options[:allow_nil] = true
-          self
-        end
-
-        def allowing_blank
-          check_valid_option :allowing_blank
-          @options[:allow_blank] = true
-          self
-        end
-
-        def allowing_missing
-          check_valid_option :allowing_missing
-          @options[:allowing_missing] = true
-          self
-        end
-
-        def with_message(message)
-          check_valid_option :with_message
-          @options[:message] = message
-          self
-        end
-
-        def additionnal_param_required?
-          false
-        end
-
-        def args_to_called_attributes(args)
-          [args.pop].flatten
-        end
-
         def valid?(db, instance, klass, attribute, options)
           additionnal_param_check if self.respond_to?(:additionnal_param_check)
 
@@ -88,6 +41,30 @@ module SequelSpec
           end
 
           false
+        end
+
+        def allowing_nil
+          with_options :allow_nil => true
+        end
+
+        def allowing_blank
+          with_options :allow_blank => true
+        end
+
+        def allowing_missing
+          with_options :allow_missing => true
+        end
+
+        def with_message(message)
+          with_options :message => message
+        end
+
+        def additionnal_param_required?
+          false
+        end
+
+        def args_to_called_attributes(args)
+          [args.pop].flatten
         end
       end
     end

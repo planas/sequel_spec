@@ -11,10 +11,6 @@ module SequelSpec
         def validation_type
           :validates_not_null
         end
-
-        def valid_options
-          [:with_message]
-        end
       end
 
       def validate_not_null(attribute)

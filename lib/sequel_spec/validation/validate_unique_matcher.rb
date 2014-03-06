@@ -12,10 +12,6 @@ module SequelSpec
           :validates_unique
         end
 
-        def valid_options
-          [:with_message]
-        end
-
         def args_to_called_attributes(args)
           called_attributes = []
           until args.empty?

@@ -19,12 +19,6 @@ describe "validate_not_null_matcher" do
     }.to raise_error(ArgumentError)
   end
 
-  it "should refuse not allowed options" do
-    expect {
-      @matcher = validate_not_null(:name).allowing_nil
-    }.to raise_error(ArgumentError)
-  end
-
   it "should accept with an attribute" do
     expect {
       subject.should validate_not_null(:name)
@@ -37,9 +31,15 @@ describe "validate_not_null_matcher" do
     }.not_to raise_error
   end
 
-  it "should reject with invalid options" do
+  it "should reject with options with invalid values" do
     expect {
       subject.should validate_not_null(:name).with_message "Bye"
+    }.to raise_error
+  end
+
+  it "should reject with invalid options" do
+    expect {
+      subject.should validate_not_null(:name).allowing_nil
     }.to raise_error
   end
 

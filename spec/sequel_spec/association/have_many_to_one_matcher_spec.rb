@@ -16,6 +16,7 @@ describe "have_many_to_one_matcher" do
         @matcher = have_many_to_one :item
         @matcher.description.should == "have a many_to_one association :item"
       end
+
       it "should set failure messages" do
         @matcher = have_many_to_one :item
         @matcher.matches? subject
@@ -23,19 +24,22 @@ describe "have_many_to_one_matcher" do
         @matcher.negative_failure_message.should == "expected Comment to not " + @matcher.description
       end
     end
+
     describe "with options" do
       it "should contain a description" do
-        @matcher = have_many_to_one :item, :class_name => "Item"
+        @matcher = have_many_to_one(:item).with_options :class_name => "Item"
         @matcher.description.should == 'have a many_to_one association :item with option(s) :class_name => "Item"'
       end
+
       it "should set failure messages" do
-        @matcher = have_many_to_one :item, :class_name => "Item"
+        @matcher = have_many_to_one(:item).with_options :class_name => "Item"
         @matcher.matches? subject
         @matcher.failure_message.should == "expected Comment to " + @matcher.description
         @matcher.negative_failure_message.should == "expected Comment to not " + @matcher.description
       end
+
       it "should explicit used options if different than expected" do
-        @matcher = have_many_to_one :item, :class_name => "Price"
+        @matcher = have_many_to_one(:item).with_options :class_name => "Price"
         @matcher.matches? subject
         explanation = ' expected :class_name == "Price" but found "Item" instead'
         @matcher.failure_message.should == "expected Comment to " + @matcher.description + explanation
@@ -46,8 +50,8 @@ describe "have_many_to_one_matcher" do
 
   describe "matchers" do
     it{ should have_many_to_one(:item) }
-    it{ should have_many_to_one(:item, :class_name => "Item") }
+    it{ should have_many_to_one(:item).with_options :class_name => "Item" }
     it{ should_not have_many_to_one(:price) }
-    it{ should_not have_many_to_one(:item, :class_name => "Price") }
+    it{ should_not have_many_to_one(:item).with_options :class_name => "Price" }
   end
 end

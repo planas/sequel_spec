@@ -2,7 +2,7 @@ module SequelSpec
   module Matchers
     module Association
       class HaveOneToManyMatcher < AssociationMatcher
-        def initialize(attribute, options = {})
+        def initialize(attribute)
           @association_type = :one_to_many
           super
         end

@@ -1,11 +1,13 @@
 module SequelSpec
   module Matchers
     class Base
-      def initialize(attribute, options = {})
+      def initialize(attribute)
         raise ArgumentError, "Attribute not specified" unless attribute
         @attribute   = attribute
         @description = []
-        @options     = options
+        @options     = {}
+
+        self
       end
 
       def matches?(subject)
@@ -18,6 +20,13 @@ module SequelSpec
           @prefix = "expected #{subject.table_name.to_s.classify} to"
           valid?(subject.db, subject.new, subject, @attribute, @options)
         end
+      end
+
+      def with_options(opts)
+        raise ArgumentError, "#with_options expects a hash, #{opts.class} given" unless opts.is_a? Hash
+
+        @options.merge! opts
+        self
       end
 
       def failure_message

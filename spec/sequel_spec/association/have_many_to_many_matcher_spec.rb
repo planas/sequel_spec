@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe "have_many_to_many_matcher" do
-  before do
+  before :all do
     define_model :item
     define_model :comment do
       many_to_many :items
@@ -16,6 +16,7 @@ describe "have_many_to_many_matcher" do
         @matcher = have_many_to_many :items
         @matcher.description.should == "have a many_to_many association :items"
       end
+
       it "should set failure messages" do
         @matcher = have_many_to_many :items
         @matcher.matches? subject
@@ -25,17 +26,19 @@ describe "have_many_to_many_matcher" do
     end
     describe "with options" do
       it "should contain a description" do
-        @matcher = have_many_to_many :items, :class_name => "Item"
+        @matcher = have_many_to_many(:items).with_options :class_name => "Item"
         @matcher.description.should == 'have a many_to_many association :items with option(s) :class_name => "Item"'
       end
+
       it "should set failure messages" do
-        @matcher = have_many_to_many :items, :class_name => "Item"
+        @matcher = have_many_to_many(:items).with_options :class_name => "Item"
         @matcher.matches? subject
         @matcher.failure_message.should == "expected Comment to " + @matcher.description
         @matcher.negative_failure_message.should == "expected Comment to not " + @matcher.description
       end
+
       it "should explicit used options if different than expected" do
-        @matcher = have_many_to_many :items, :class_name => "Price"
+        @matcher = have_many_to_many(:items).with_options :class_name => "Price"
         @matcher.matches? subject
         explanation = ' expected :class_name == "Price" but found "Item" instead'
         @matcher.failure_message.should == "expected Comment to " + @matcher.description + explanation
@@ -46,9 +49,9 @@ describe "have_many_to_many_matcher" do
 
   describe "matchers" do
     it{ should have_many_to_many(:items) }
-    it{ should have_many_to_many(:items, :class_name => "Item", :join_table => :comments_items) }
+    it{ should have_many_to_many(:items).with_options :class_name => "Item", :join_table => :comments_items }
     it{ should_not have_many_to_many(:prices) }
-    it{ should_not have_many_to_many(:items, :class_name => "Price") }
-    it{ should_not have_many_to_many(:items, :join_table => :items_comments) }
+    it{ should_not have_many_to_many(:items).with_options :class_name => "Price" }
+    it{ should_not have_many_to_many(:items).with_options :join_table => :items_comments }
   end
 end
