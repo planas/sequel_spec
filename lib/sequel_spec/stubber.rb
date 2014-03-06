@@ -1,19 +1,19 @@
+require 'ostruct'
+
 module SequelSpec
   class Stubber
-    attr_reader :called, :called_args
+    attr_reader :calls
 
     def initialize
-      @called = false
-      @called_args = []
+      @calls = []
     end
 
     def call(args)
-      @called = true
-      @called_args = args
+      @calls << OpenStruct.new(:args => args)
     end
 
     def called?
-      @called
+      @calls.size > 0
     end
 
     module Integration

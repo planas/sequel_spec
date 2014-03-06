@@ -23,20 +23,22 @@ module SequelSpec
           # Return directly if the expected validate method was not called
           return false unless stubber.called?
 
-          args = stubber.called_args
-          called_options = args.last.is_a?(Hash) ? args.pop : {}
-          called_attributes = args_to_called_attributes(args)
-          called_additionnal = args.shift if additionnal_param_required?
+          stubber.calls.each do |call|
+            args = call.args
+            called_options = args.last.is_a?(Hash) ? args.pop : {}
+            called_attributes = args_to_called_attributes(args)
+            called_additionnal = args.shift if additionnal_param_required?
 
-          if !args.empty?
-            @suffix << "but called with too many params"
-          elsif called_attributes.include?(attribute)
-            if additionnal_param_required? && @additionnal != called_additionnal
-              @suffix << "but called with #{called_additionnal} instead"
-            elsif !options.empty? && called_options != options
-              @suffix << "but called with option(s) #{hash_to_nice_string called_options} instead"
-            else
-              return true
+            if !args.empty?
+              @suffix << "but called with too many params"
+            elsif called_attributes.include?(attribute)
+              if additionnal_param_required? && @additionnal != called_additionnal
+                @suffix << "but called with #{called_additionnal} instead"
+              elsif !options.empty? && called_options != options
+                @suffix << "but called with option(s) #{hash_to_nice_string called_options} instead"
+              else
+                return true
+              end
             end
           end
 
