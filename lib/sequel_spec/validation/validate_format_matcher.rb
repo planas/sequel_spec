@@ -8,7 +8,6 @@ module SequelSpec
           desc
         end
 
-        # temporal workaround
         def additionnal_param_required?
           true
         end
