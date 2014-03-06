@@ -17,14 +17,9 @@ module SequelSpec
           instance.extend Stubber::Integration
           stubber = instance.agnostic_stub(validation_type)
 
-          # Run validations
-          instance.valid?
+          called = false
 
-          # Return directly if the expected validate method was not called
-          return false unless stubber.called?
-
-          stubber.calls.each do |call|
-            args = call.args
+          stubber.when_called do |args|
             called_options = args.last.is_a?(Hash) ? args.pop : {}
             called_attributes = args_to_called_attributes(args)
             called_additionnal = args.shift if additionnal_param_required?
@@ -37,12 +32,15 @@ module SequelSpec
               elsif !options.empty? && called_options != options
                 @suffix << "but called with option(s) #{hash_to_nice_string called_options} instead"
               else
-                return true
+                called = true
               end
             end
           end
 
-          false
+          # Run validations
+          instance.valid?
+
+          called
         end
 
         def allowing_nil

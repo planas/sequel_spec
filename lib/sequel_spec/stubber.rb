@@ -2,18 +2,12 @@ require 'ostruct'
 
 module SequelSpec
   class Stubber
-    attr_reader :calls
-
-    def initialize
-      @calls = []
+    def when_called(&block)
+      @reaction = block
     end
 
-    def call(args)
-      @calls << OpenStruct.new(:args => args)
-    end
-
-    def called?
-      @calls.size > 0
+    def react(args)
+      @reaction.call(args)
     end
 
     module Integration
@@ -22,7 +16,7 @@ module SequelSpec
 
         self.class.class_eval do
           remove_method(method_name) if self.respond_to?(method_name)
-          define_method(method_name) { |*args| stubber.call(args) }
+          define_method(method_name) { |*args| stubber.react(args) }
         end
 
         stubber
