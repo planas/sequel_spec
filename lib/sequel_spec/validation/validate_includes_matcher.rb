@@ -8,8 +8,24 @@ module SequelSpec
           desc
         end
 
-        def additionnal_param_type
-          Enumerable
+        # temp workaround
+        def additionnal_param_required?
+          true
+        end
+
+        def additionnal_param_check
+          unless @additionnal
+            raise ArgumentError, "You should specify inclusion using #in"
+          end
+        end
+
+        def in(value)
+          unless value.is_a?(Enumerable)
+            raise ArgumentError, "#in expects a #{Enumerable}"
+          end
+
+          @additionnal = value
+          self
         end
 
         def validation_type

@@ -67,6 +67,8 @@ module SequelSpec
         end
 
         def valid?(db, instance, klass, attribute, options)
+          additionnal_param_check if self.respond_to?(:additionnal_param_check)
+
           # check validation itself
           called_count = 0
           instance = instance.dup

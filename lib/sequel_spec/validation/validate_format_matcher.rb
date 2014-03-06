@@ -8,8 +8,24 @@ module SequelSpec
           desc
         end
 
-        def additionnal_param_type
-          Regexp
+        # temporal workaround
+        def additionnal_param_required?
+          true
+        end
+
+        def additionnal_param_check
+          unless @additionnal
+            raise ArgumentError, "You should specify the format using #with"
+          end
+        end
+
+        def with(value)
+          unless value.is_a?(Regexp)
+            raise ArgumentError, "#with expects a Regexp"
+          end
+
+          @additionnal = value
+          self
         end
 
         def validation_type
