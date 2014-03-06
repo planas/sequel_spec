@@ -6,6 +6,7 @@ require 'sequel_spec/validation/validate_integer_matcher'
 require 'sequel_spec/validation/validate_numeric_matcher'
 require 'sequel_spec/validation/validate_presence_matcher'
 require 'sequel_spec/validation/validate_unique_matcher'
+require 'sequel_spec/validation/validate_not_null_matcher'
 require 'sequel_spec/validation/validate_type_matcher'
 
 module SequelSpec
