@@ -8,6 +8,7 @@ require 'sequel_spec/validation/validate_presence_matcher'
 require 'sequel_spec/validation/validate_unique_matcher'
 require 'sequel_spec/validation/validate_not_null_matcher'
 require 'sequel_spec/validation/validate_type_matcher'
+require 'sequel_spec/validation/validate_schema_types_matcher'
 
 module SequelSpec
   module Matchers
