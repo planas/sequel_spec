@@ -13,8 +13,8 @@ module SequelSpec
         end
       end
 
-      def validate_integer(*args)
-        ValidateIntegerMatcher.new(*args)
+      def validate_integer(attribute)
+        ValidateIntegerMatcher.new(attribute)
       end
 
       alias :validate_integrity_of :validate_integer

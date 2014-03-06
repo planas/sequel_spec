@@ -2,25 +2,8 @@ module SequelSpec
   module Matchers
     module Validation
       class ValidateMatcher < Base
-        def initialize(*args)
-          super(args.pop)
-
-          # check additionnal param
-          if additionnal_param_required?
-            if args.size > 1
-              raise ArgumentError, "Too many params for matcher"
-            else
-              @additionnal = args.pop
-
-              unless @additionnal.kind_of?(additionnal_param_type)
-                raise ArgumentError, "Expected matcher first parameter to be #{additionnal_param_type.inspect}
-                                      but received #{@additionnal.class.inspect} instead"
-              end
-            end
-          else
-            raise ArgumentError, "Too many params for matcher" unless args.empty?
-          end
-
+        def initialize(attribute)
+          super(attribute)
           self
         end
 
@@ -58,12 +41,8 @@ module SequelSpec
           self
         end
 
-        def additionnal_param_type
-          NilClass
-        end
-
         def additionnal_param_required?
-          additionnal_param_type != NilClass
+          false
         end
 
         def valid?(db, instance, klass, attribute, options)

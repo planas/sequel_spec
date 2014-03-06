@@ -70,8 +70,8 @@ module SequelSpec
         end
       end
 
-      def validate_length(*args)
-        ValidateLengthMatcher.new(*args)
+      def validate_length(attribute)
+        ValidateLengthMatcher.new(attribute)
       end
 
       alias :validate_length_of :validate_length

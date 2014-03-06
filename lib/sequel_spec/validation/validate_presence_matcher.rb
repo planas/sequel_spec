@@ -13,8 +13,8 @@ module SequelSpec
         end
       end
 
-      def validate_presence(*args)
-        ValidatePresenceMatcher.new(*args)
+      def validate_presence(attribute)
+        ValidatePresenceMatcher.new(attribute)
       end
 
       alias :validate_presence_of :validate_presence

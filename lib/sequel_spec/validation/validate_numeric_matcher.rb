@@ -13,8 +13,8 @@ module SequelSpec
         end
       end
 
-      def validate_numeric(*args)
-        ValidateNumericMatcher.new(*args)
+      def validate_numeric(attribute)
+        ValidateNumericMatcher.new(attribute)
       end
 
       alias :validate_numericality_of :validate_numeric

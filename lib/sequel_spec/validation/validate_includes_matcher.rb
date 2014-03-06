@@ -33,8 +33,8 @@ module SequelSpec
         end
       end
 
-      def validate_includes(*args)
-        ValidateIncludesMatcher.new(*args)
+      def validate_includes(attribute)
+        ValidateIncludesMatcher.new(attribute)
       end
 
       alias :ensure_inclusion_of :validate_includes
