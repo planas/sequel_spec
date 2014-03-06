@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe "have_many_to_one_matcher" do
-  before do
+  before :all do
     define_model :item
     define_model :comment do
       many_to_one :item
