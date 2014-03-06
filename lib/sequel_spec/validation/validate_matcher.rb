@@ -1,3 +1,5 @@
+require 'sequel_spec/stubber'
+
 module SequelSpec
   module Matchers
     module Validation
@@ -45,44 +47,47 @@ module SequelSpec
           false
         end
 
+        def args_to_called_attributes(args)
+          [args.pop].flatten
+        end
+
         def valid?(db, instance, klass, attribute, options)
           additionnal_param_check if self.respond_to?(:additionnal_param_check)
 
-          # check validation itself
-          called_count = 0
+          # We don't want to affect the original instance
           instance = instance.dup
-          instance.class.columns # ensure colums are read again after .dup
 
-          instance.stub(validation_type).and_return do |*args|
-            called_options = args.last.is_a?(Hash) ? args.pop : {}
-            called_attributes = args_to_called_attributes(args)
-            called_additionnal = args.shift if additionnal_param_required?
+          # Ensure colums are read again after .dup
+          instance.class.columns
 
-            if !args.empty?
-              @suffix << "but called with too many params"
-            elsif called_attributes.include?(attribute)
-              if additionnal_param_required? && @additionnal != called_additionnal
-                @suffix << "but called with #{called_additionnal} instead"
-              elsif !options.empty? && called_options != options
-                @suffix << "but called with option(s) #{hash_to_nice_string called_options} instead"
-              else
-                called_count += 1
-              end
+          # Stub the validation_type method
+          instance.extend Stubber::Integration
+          stubber = instance.agnostic_stub(validation_type)
+
+          # Run validations
+          instance.valid?
+
+          # Return directly if the expected validate method was not called
+          return false unless stubber.called?
+
+          args = stubber.called_args
+          called_options = args.last.is_a?(Hash) ? args.pop : {}
+          called_attributes = args_to_called_attributes(args)
+          called_additionnal = args.shift if additionnal_param_required?
+
+          if !args.empty?
+            @suffix << "but called with too many params"
+          elsif called_attributes.include?(attribute)
+            if additionnal_param_required? && @additionnal != called_additionnal
+              @suffix << "but called with #{called_additionnal} instead"
+            elsif !options.empty? && called_options != options
+              @suffix << "but called with option(s) #{hash_to_nice_string called_options} instead"
+            else
+              return true
             end
           end
 
-          instance.valid?
-
-          if called_count > 1
-            @suffix << "but validation is called too many times"
-            return false
-          end
-
-          called_count == 1
-        end
-
-        def args_to_called_attributes(args)
-          [args.pop].flatten
+          false
         end
       end
     end
