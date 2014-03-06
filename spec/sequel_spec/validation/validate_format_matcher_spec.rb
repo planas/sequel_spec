@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe "validate_format_matcher" do
-  before do
+  before :all do
     define_model :item do
       plugin :validation_helpers
 
@@ -13,30 +13,40 @@ describe "validate_format_matcher" do
 
   subject{ Item }
 
-  describe "arguments" do
-    it "should require attribute" do
-      expect {
-        @matcher = validate_format
-      }.to raise_error(ArgumentError)
-    end
+  it "should require an attribute" do
+    expect {
+      subject.should validate_format
+    }.to raise_error(ArgumentError)
+  end
 
-    it "should require additionnal parameters" do
-      expect {
-        @matcher = validate_format(:name).matches?
-      }.to raise_error(ArgumentError)
-    end
+  it "should require additionnal parameters" do
+    expect {
+      subject.should validate_format(:name)
+    }.to raise_error(ArgumentError)
+  end
 
-    it "should refuse invalid additionnal parameters" do
-      expect {
-        @matcher = validate_format(:id, :name)
-      }.to raise_error(ArgumentError)
-    end
+  it "should accept with valid parameters" do
+    expect {
+      subject.should validate_format_of(:name).with(/[abc]+/)
+    }.not_to raise_error
+  end
 
-    it "should accept valid additionnal parameters" do
-      expect {
-        @matcher = validate_format_of(:name).with(/[abc]+/)
-      }.not_to raise_error
-    end
+  it "should reject with invalid parameters" do
+    expect {
+      subject.should validate_format_of(:name).with(/[xyz]+/)
+    }.to raise_error
+  end
+
+  it "should accept with valid parameters and options" do
+    expect {
+      subject.should validate_format_of(:name).with(/[abc]+/).allowing_nil
+    }.not_to raise_error
+  end
+
+  it "should reject with valid parameters but invalid options" do
+    expect {
+      subject.should validate_format_of(:name).with(/[abc]+/).allowing_missing
+    }.to raise_error
   end
 
   describe "messages" do
@@ -74,13 +84,5 @@ describe "validate_format_matcher" do
         @matcher.negative_failure_message.should == "expected Item to not " + @matcher.description + explanation
       end
     end
-  end
-
-  describe "matchers" do
-    it{ should validate_format_of(:name).with(/[abc]+/) }
-    it{ should validate_format_of(:name).with(/[abc]+/).allowing_nil }
-    it{ should_not validate_format_of(:price).with(/[abc]+/) }
-    it{ should_not validate_format_of(:name).with(/[abc]/) }
-    it{ should_not validate_format_of(:name).with(/[abc]+/).allowing_blank }
   end
 end

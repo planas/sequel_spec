@@ -3,6 +3,9 @@ Sequel.migration do
     create_table  :items do
       primary_key :id
       String      :name
+      String      :manufacturer
+      String      :origin
+      String      :owner
       Float       :price
     end
 

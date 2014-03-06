@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe "validate_presence_matcher" do
-  before do
+  before :all do
     define_model :item do
       plugin :validation_helpers
 
@@ -13,18 +13,28 @@ describe "validate_presence_matcher" do
 
   subject{ Item }
 
-  describe "arguments" do
-    it "should require attribute" do
-      expect {
-        @matcher = validate_presence
-      }.to raise_error(ArgumentError)
-    end
+  it "should require an attribute" do
+    expect {
+      subject.should validate_presence
+    }.to raise_error(ArgumentError)
+  end
 
-    it "should refuse additionnal parameters" do
-      expect {
-        @matcher = validate_presence :name, :id
-      }.to raise_error(ArgumentError)
-    end
+  it "should accept with an attribute" do
+    expect {
+      subject.should validate_presence(:name)
+    }.not_to raise_error
+  end
+
+  it "should accept with valid options" do
+    expect {
+      subject.should validate_presence(:name).allowing_nil
+    }.not_to raise_error
+  end
+
+  it "should reject with invalid options" do
+    expect {
+      subject.should validate_presence(:name).allowing_blank
+    }.to raise_error
   end
 
   describe "messages" do
@@ -63,12 +73,5 @@ describe "validate_presence_matcher" do
         @matcher.negative_failure_message.should == "expected Item to not " + @matcher.description + explanation
       end
     end
-  end
-
-  describe "matchers" do
-    it{ should validate_presence(:name) }
-    it{ should validate_presence(:name).allowing_nil }
-    it{ should_not validate_presence(:price) }
-    it{ should_not validate_presence(:name).allowing_blank }
   end
 end

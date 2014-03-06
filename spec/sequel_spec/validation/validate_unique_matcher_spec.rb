@@ -13,24 +13,34 @@ describe "validate_unique_matcher" do
 
   subject{ Item }
 
-  describe "arguments" do
-    it "should require attribute" do
-      expect {
-        @matcher = validate_unique
-      }.to raise_error(ArgumentError)
-    end
+  it "should require an attribute" do
+    expect {
+      subject.should validate_unique
+    }.to raise_error(ArgumentError)
+  end
 
-    it "should refuse additionnal parameters" do
-      expect {
-        @matcher = validate_unique :name, :id
-      }.to raise_error(ArgumentError)
-    end
+  it "should refuse not allowed options" do
+    expect {
+      @matcher = validate_unique(:name).allowing_nil
+    }.to raise_error(ArgumentError)
+  end
 
-    it "should refuse not allowed options" do
-      expect {
-        @matcher = validate_unique(:name).allowing_nil
-      }.to raise_error(ArgumentError)
-    end
+  it "should accept with an attribute" do
+    expect {
+      subject.should validate_unique(:name)
+    }.not_to raise_error
+  end
+
+  it "should accept with valid options" do
+    expect {
+      subject.should validate_unique(:name).with_message "Hello"
+    }.not_to raise_error
+  end
+
+  it "should reject with invalid options" do
+    expect {
+      subject.should validate_unique(:name).with_message "Bye"
+    }.to raise_error
   end
 
   describe "messages" do
@@ -69,13 +79,5 @@ describe "validate_unique_matcher" do
         @matcher.negative_failure_message.should == "expected Item to not " + @matcher.description + explanation
       end
     end
-  end
-
-  describe "matchers" do
-    it{ should validate_unique(:name) }
-    it{ should validate_unique([:id, :name]) }
-    it{ should validate_unique(:name).with_message("Hello") }
-    it{ should_not validate_unique(:id) }
-    it{ should_not validate_unique(:price) }
   end
 end
