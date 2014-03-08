@@ -1,5 +1,3 @@
-require 'sequel_spec/stubber'
-
 module SequelSpec
   module Matchers
     module Validation
@@ -7,19 +5,12 @@ module SequelSpec
         def valid?(db, instance, klass, attribute, options)
           additionnal_param_check if self.respond_to?(:additionnal_param_check)
 
-          # We don't want to affect the original instance
           instance = instance.dup
-
-          # Ensure colums are read again after .dup
           instance.class.columns
-
-          # Stub the validation_type method
-          instance.extend Stubber::Integration
-          stubber = instance.agnostic_stub(validation_type)
 
           called = false
 
-          stubber.when_called do |args|
+          proxy = Proc.new do |args|
             called_options = args.last.is_a?(Hash) ? args.pop : {}
             called_attributes = args_to_called_attributes(args)
             called_additionnal = args.shift if additionnal_param_required?
@@ -36,6 +27,10 @@ module SequelSpec
               end
             end
           end
+
+          instance.singleton_class.send(:define_method, validation_type,
+            Proc.new { |*args| proxy.call(args) }
+          )
 
           # Run validations
           instance.valid?
