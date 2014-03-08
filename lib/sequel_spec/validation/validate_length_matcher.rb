@@ -5,7 +5,7 @@ module SequelSpec
         attr_reader :validation_type
 
         def description
-          desc = "validate length of #{@attribute.inspect} "
+          desc = "validate that length of #{@attribute.inspect} "
           desc << case validation_type
           when :validates_exact_length then "is exactly"
           when :validates_min_length   then "is greater than or equal to"
