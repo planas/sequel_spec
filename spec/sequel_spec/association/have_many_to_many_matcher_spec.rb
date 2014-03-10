@@ -24,6 +24,7 @@ describe "have_many_to_many_matcher" do
         @matcher.negative_failure_message.should == "expected Comment to not " + @matcher.description
       end
     end
+
     describe "with options" do
       it "should contain a description" do
         @matcher = have_many_to_many(:items).with_options :class_name => "Item"
