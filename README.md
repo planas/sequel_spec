@@ -89,3 +89,7 @@ it { should validate_length_of(:name).is(20).with_message "Name should be 20 cha
 3. Commit your changes (`git commit -am 'Add some feature'`)
 4. Push to the branch (`git push origin my-new-feature`)
 5. Create new Pull Request
+
+## Credits
+
+* Jonathan Tron and Joseph Halter for the original [rspec_sequel_matchers](https://github.com/openhood/rspec_sequel_matchers) code
