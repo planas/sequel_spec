@@ -19,36 +19,36 @@ describe "have_many_through_many_matcher" do
     describe "without option" do
       it "should contain a description" do
         @matcher = have_many_through_many :comments
-        @matcher.description.should == "have a many_through_many association :comments"
+        expect(@matcher.description).to eq "have a many_through_many association :comments"
       end
 
       it "should set failure messages" do
         @matcher = have_many_through_many :comments
         @matcher.matches? subject
-        @matcher.failure_message.should == "expected Item to " + @matcher.description
-        @matcher.negative_failure_message.should == "expected Item to not " + @matcher.description
+        expect(@matcher.failure_message).to eq "expected Item to " + @matcher.description
+        expect(@matcher.failure_message_when_negated).to eq "expected Item to not " + @matcher.description
       end
     end
 
     describe "with options" do
       it "should contain a description" do
         @matcher = have_many_through_many(:comments).with_options :join_table => :comments_items
-        @matcher.description.should == 'have a many_through_many association :comments with option(s) :join_table => :comments_items'
+        expect(@matcher.description).to eq 'have a many_through_many association :comments with option(s) :join_table => :comments_items'
       end
 
       it "should set failure messages" do
         @matcher = have_many_through_many(:comments).with_options :class_name => "Comment"
         @matcher.matches? subject
-        @matcher.failure_message.should == "expected Item to " + @matcher.description
-        @matcher.negative_failure_message.should == "expected Item to not " + @matcher.description
+        expect(@matcher.failure_message).to eq "expected Item to " + @matcher.description
+        expect(@matcher.failure_message_when_negated).to eq "expected Item to not " + @matcher.description
       end
 
       it "should explicit used options if different than expected" do
         @matcher = have_many_through_many(:comments).with_options :join_table => :whatever
         @matcher.matches? subject
         explanation = ' expected :join_table == :whatever but found :comments_items instead'
-        @matcher.failure_message.should == "expected Item to " + @matcher.description + explanation
-        @matcher.negative_failure_message.should == "expected Item to not " + @matcher.description + explanation
+        expect(@matcher.failure_message).to eq "expected Item to " + @matcher.description + explanation
+        expect(@matcher.failure_message_when_negated).to eq "expected Item to not " + @matcher.description + explanation
       end
     end
   end

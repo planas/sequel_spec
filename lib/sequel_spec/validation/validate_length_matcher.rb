@@ -28,8 +28,8 @@ module SequelSpec
         end
 
         def is(value)
-          unless value.is_a?(Fixnum)
-            raise ArgumentError, "#is expects a Fixnum, #{value.class} given"
+          unless value.is_a?(Integer)
+            raise ArgumentError, "#is expects an Integer, #{value.class} given"
           end
 
           @additionnal = value
@@ -40,8 +40,8 @@ module SequelSpec
         alias :is_equal_to :is
 
         def is_at_least(value)
-          unless value.is_a?(Fixnum)
-            raise ArgumentError, "#is_at_least expects a Fixnum, #{value.class} given"
+          unless value.is_a?(Integer)
+            raise ArgumentError, "#is_at_least expects an Integer, #{value.class} given"
           end
 
           @additionnal = value
@@ -50,8 +50,8 @@ module SequelSpec
         end
 
         def is_at_most(value)
-          unless value.is_a?(Fixnum)
-            raise ArgumentError, "#is_at_most expects a Fixnum, #{value.class} given"
+          unless value.is_a?(Integer)
+            raise ArgumentError, "#is_at_most expects an Integer, #{value.class} given"
           end
 
           @additionnal = value

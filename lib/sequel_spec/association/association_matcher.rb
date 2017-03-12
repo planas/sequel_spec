@@ -17,8 +17,14 @@ module SequelSpec
           else
             matching = @association[:type] == association_type
             options.each do |key, value|
-              if @association[key] != value
-                @suffix << "expected #{key.inspect} == #{value.inspect} but found #{@association[key].inspect} instead"
+              assoc_key = @association[key]
+
+              if assoc_key.is_a?(String) && assoc_key.start_with?('::')
+                assoc_key = assoc_key.demodulize
+              end
+
+              if assoc_key != value
+                @suffix << "expected #{key.inspect} == #{value.inspect} but found #{assoc_key.inspect} instead"
                 matching = false
               end
             end

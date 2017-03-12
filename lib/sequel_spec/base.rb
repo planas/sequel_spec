@@ -33,7 +33,7 @@ module SequelSpec
         [@prefix, description, @suffix].flatten.compact.join(" ")
       end
 
-      def negative_failure_message
+      def failure_message_when_negated
         [@prefix, "not", description, @suffix].flatten.compact.join(" ")
       end
 
